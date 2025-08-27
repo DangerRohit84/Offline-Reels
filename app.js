@@ -450,7 +450,7 @@ class OfflineReelsApp {
 
     loadCurrentVideo() {
         if (this.videos.length === 0) return;
-        
+    
         const video = this.videos[this.currentVideoIndex];
         const videoElement = document.getElementById('videoElement');
         const videoTitle = document.getElementById('videoTitle');
@@ -461,6 +461,9 @@ class OfflineReelsApp {
         // Create blob URL for video
         const videoURL = URL.createObjectURL(video.blob);
         videoElement.src = videoURL;
+
+        // Enable loop on video element
+        videoElement.loop = true;
         
         // Update video info
         if (videoTitle) videoTitle.textContent = video.filename;
@@ -473,6 +476,7 @@ class OfflineReelsApp {
             }
             videoElement.previousSrc = videoURL;
         });
+
     }
 
     updateNavigationButtons() {
