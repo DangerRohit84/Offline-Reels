@@ -412,6 +412,9 @@ class OfflineReelsApp {
     updateUI() {
         const emptyState = document.getElementById('emptyState');
         const videoPlayer = document.getElementById('videoPlayer');
+        const videoElement = document.getElementById('videoElement');
+        
+        videoElement.autoplay = true;
         
         if (this.videos.length === 0) {
             if (emptyState) emptyState.style.display = 'flex';
