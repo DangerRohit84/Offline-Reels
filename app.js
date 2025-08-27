@@ -1,18 +1,19 @@
 // Offline Reels App JavaScript
 function shuffle(array) {
-    let currentIndex = array.length, randomIndex;
+    let currentIndex = array.length;
 
     while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
+        const randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
         [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
+
     return array;
 }
 
 class OfflineReelsApp {
-    constructor() {
+    constructor() { 
         this.db = null;
         this.videos = [];
         this.currentVideoIndex = 0;
@@ -33,28 +34,6 @@ class OfflineReelsApp {
             console.error('Error initializing app:', error);
         }
     }
-
-    async loadVideos() {
-        // Load videos from IndexedDB - example fetchAllVideosFromDB method placeholder
-        this.videos = await this.fetchAllVideosFromDB();
-
-        // Shuffle videos for random playback order
-        this.videos = shuffle(this.videos);
-
-        this.currentVideoIndex = 0;
-    }
-
-    nextVideo() {
-        if (this.currentVideoIndex < this.videos.length - 1) {
-            this.currentVideoIndex++;
-        } else {
-            // Reshuffle when reaching the end
-            this.videos = shuffle(this.videos);
-            this.currentVideoIndex = 0;
-        }
-        this.playVideo(this.videos[this.currentVideoIndex]);
-    }
-
 
     // IndexedDB Setup
     async initDB() {
@@ -506,12 +485,19 @@ class OfflineReelsApp {
     }
 
     nextVideo() {
-        if (this.currentVideoIndex < this.videos.length - 1) {
-            this.currentVideoIndex++;
-            this.loadCurrentVideo();
-            this.updateNavigationButtons();
-            this.updateVideoProgress();
+        if (this.videos.length === 0) return;
+
+        this.currentVideoIndex++;
+
+        if (this.currentVideoIndex >= this.videos.length) {
+            // Reshuffle videos and restart from beginning on finishing all videos
+            this.videos = shuffle(this.videos);
+            this.currentVideoIndex = 0;
         }
+
+        this.loadCurrentVideo();
+        this.updateNavigationButtons();
+        this.updateVideoProgress();
     }
 
     handleKeyboard(e) {
