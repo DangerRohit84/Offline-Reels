@@ -1,4 +1,15 @@
 // Offline Reels App JavaScript
+function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+}
 
 class OfflineReelsApp {
     constructor() {
@@ -22,6 +33,28 @@ class OfflineReelsApp {
             console.error('Error initializing app:', error);
         }
     }
+
+    async loadVideos() {
+        // Load videos from IndexedDB - example fetchAllVideosFromDB method placeholder
+        this.videos = await this.fetchAllVideosFromDB();
+
+        // Shuffle videos for random playback order
+        this.videos = shuffle(this.videos);
+
+        this.currentVideoIndex = 0;
+    }
+
+    nextVideo() {
+        if (this.currentVideoIndex < this.videos.length - 1) {
+            this.currentVideoIndex++;
+        } else {
+            // Reshuffle when reaching the end
+            this.videos = shuffle(this.videos);
+            this.currentVideoIndex = 0;
+        }
+        this.playVideo(this.videos[this.currentVideoIndex]);
+    }
+
 
     // IndexedDB Setup
     async initDB() {
